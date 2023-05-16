@@ -26,6 +26,8 @@ function showInitialMessage() {
         ██║░░░░░██║░░██║██║░╚███║███████╗██║░░██║██║░░██║██║╚██████╔╝  ██║░░██║██████╔╝██║
         ╚═╝░░░░░╚═╝░░╚═╝╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░╚═════╝░  ╚═╝░░╚═╝╚═════╝░╚═╝
     `;
+    result.innerHTML += "<br>"
+    result.innerHTML += "\tType help and hit enter to see all the commands."
     terminal.appendChild(result);
 
 }
@@ -77,7 +79,6 @@ function executeCommand(command) {
             break;
     }
 
-
     window.scrollTo(0, document.body.scrollHeight);
 }
 
@@ -88,7 +89,7 @@ function clear() {
 function pwd() {
     let result = document.createElement("div");
 
-    result.innerHTML += "BA DA CE PLM VREI";
+    result.innerHTML += "Currently in working...";
     terminal.appendChild(result);
 }
 
