@@ -1,0 +1,31 @@
+body {
+    background-color: #212A3E;
+    padding-left: 10px;
+    color: white;
+}
+
+.command {
+    display: flex;
+    width: 33%;
+}
+
+.command p {
+    flex: 1;
+    margin: 0;
+    width: 33%;
+}
+
+.user {
+    color: #E5BEEC;
+}
+
+.infoLine {
+    margin-left: 0px;
+}
+
+#commandInput {
+    background-color: transparent;
+    color: white;
+    border: none;
+    outline: none;
+}
