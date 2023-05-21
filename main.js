@@ -1,34 +1,72 @@
 const inputElement = document.getElementById('commandInput');
-const terminal = document.getElementById('response');
+const terminal = document.getElementById('responses');
 const userElement = document.getElementById('user');
 const pathElement = document.getElementById('path');
 const branchElement = document.getElementById('branch');
+const VALID_COMMANDS = ['help', 'clear', 'pwd', 'cd', 'ls', 'about', 'cv', 'banner'];
 const ENTER_KEY = 13;
+const ARROW_UP = 38;
 const ASCII_NAME = `
     ██████╗░░█████╗░███╗░░██╗███████╗░█████╗░██████╗░██╗██╗░░░██╗  ░█████╗░██████╗░██╗
     ██╔══██╗██╔══██╗████╗░██║╚════██║██╔══██╗██╔══██╗██║██║░░░██║  ██╔══██╗██╔══██╗██║
     ██████╔╝███████║██╔██╗██║░░███╔═╝███████║██████╔╝██║██║░░░██║  ███████║██║░░██║██║
     ██╔═══╝░██╔══██║██║╚████║██╔══╝░░██╔══██║██╔══██╗██║██║░░░██║  ██╔══██║██║░░██║██║
     ██║░░░░░██║░░██║██║░╚███║███████╗██║░░██║██║░░██║██║╚██████╔╝  ██║░░██║██████╔╝██║
-    ╚═╝░░░░░╚═╝░░╚═╝╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░╚═════╝░  ╚═╝░░╚═╝╚═════╝░╚═╝
+    ╚═╝░░░░░╚═╝░░╚═╝╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░╚═════╝░  ╚═╝░░╚═╝╚═════╝░╚═╝ v1.2
 `;
+const NAME = "# Panzariu Ionut-Adrian";
+const ABOUT_MSG = "Welcome to my portfolio website! I am a passionate Software Developer with two years of experience.";
+const CONNECT_MSG = "Let's connect and discuss potential collaborations!";
+const TO_BE_IMPLEMENTED = "To be implemented ...";
 
 let user = userElement.innerText;
 let path = pathElement.innerText;
 let branch = branchElement.innerText;
-
-let validCommands = ['help', 'clear', 'pwd', 'cd', 'ls', 'about', 'cv', 'init'];
-
+let commands = [];
 
 inputElement.addEventListener("input", isValidCommand);
 inputElement.addEventListener('keypress', handleKeyPress);
+document.addEventListener('keydown', handleKeyDown);
+document.addEventListener('mouseup', handleClick);
+document.scrollIntoView = false;
+ 
+executeCommand("banner");
 
+function isValidCommand() {
+    if (VALID_COMMANDS.includes(inputElement.value)) {
+        inputElement.style.color = "green";
+    } else {
+        inputElement.style.color = "red";
+    }
+}
 
 function handleKeyPress(event) {
     if (event.keyCode === ENTER_KEY) {
         const command = inputElement.value.trim();
         executeCommand(command);
+        if (command != '') {
+            commands.push(command);
+        }
     }
+}
+
+function handleKeyDown(event) {
+    if (event.ctrlKey && event.key === 'l') {
+        event.preventDefault();
+        clear();
+    }
+
+    if (event.keyCode === ARROW_UP) {
+        if (commands.length === 0)
+            return;
+        inputElement.value = commands[commands.length - 1];
+        inputElement.setSelectionRange(inputElement.value.length, inputElement.value.length);
+        inputElement.focus();
+    }
+}
+
+function handleClick() {
+    inputElement.focus();
 }
 
 function executeCommand(command) {
@@ -57,63 +95,35 @@ function executeCommand(command) {
         case 'ls':
             ls();
             break;
-        case 'init':
-            showInitialMessage();
+        case 'banner':
+            banner();
             break;
     }
 
-    terminal.scrollIntoView(false);
-    window.scrollTo(0, terminal.height);
+    terminal.scrollTo(0, terminal.scrollHeight);
 }
 
 function addInfoLine(command) {
     let result = document.createElement("div");
     result.setAttribute("class", "command");
 
-    let localUser = document.createElement("p");
-    localUser.setAttribute("class", "infoLine user");
-    localUser.innerHTML += user;
-    result.appendChild(localUser);
-
-
-    let localPath = document.createElement("p");
-    localPath.setAttribute("class", "infoLine path");
-    localPath.innerHTML += path;
-    result.appendChild(localPath);
-
-    let localBranch = document.createElement("p");
-    localBranch.setAttribute("class", "infoLine branch");
-    localBranch.innerHTML += branch;
-    result.appendChild(localBranch);
-
-    let cmd = document.createElement("p");
-    cmd.setAttribute("class", "infoLine");
-    cmd.innerHTML += command;
-    result.appendChild(cmd);
+    addParagraphToComponent(result, user, "infoLine user");
+    addParagraphToComponent(result, path, "infoLine path");
+    addParagraphToComponent(result, branch, "infoLine branch");
+    addParagraphToComponent(result, command, "infoLine");
 
     terminal.appendChild(result);
 }
 
-function showInitialMessage() {
+function banner() {
     let result = document.createElement("pre");
     result.style.height = "25%";
 
     result.innerHTML += ASCII_NAME;
     result.innerHTML += "<br>"
-    result.innerHTML += "    Type help and hit enter to see all the commands."
+    result.innerHTML += "    Type <i>help</i> and hit enter to see all the commands."
     terminal.appendChild(result);
 }
-
-showInitialMessage();
-
-function isValidCommand() {
-    if (validCommands.includes(inputElement.value)) {
-        inputElement.style.color = "green";
-    } else {
-        inputElement.style.color = "red";
-    }
-}
-
 
 function clear() {
     terminal.innerHTML = '';
@@ -121,49 +131,68 @@ function clear() {
 
 function pwd() {
     let result = document.createElement("div");
-
-    result.innerHTML += "Currently in working...";
+    let description = document.createElement("p");
+    description.innerHTML = path;
+    result.appendChild(description);
     terminal.appendChild(result);
 }
 
 function help() {
     const result = document.createElement("div");
-    const ul = document.createElement("ul");
-    ul.style.listStyle = "none";
+    result.innerText += "Available commands: "
+    const description = document.createElement("p");
 
-    validCommands.forEach(cmd => {
-        const li = document.createElement("li");
-        li.innerHTML = cmd;
-        ul.appendChild(li);
+    VALID_COMMANDS.forEach((cmd, index) => {
+        description.innerText += cmd;
+        if (index != VALID_COMMANDS.length - 1) {
+            description.innerText += ", ";
+        }
     });
 
-    result.appendChild(ul);
+    result.appendChild(description);
     terminal.appendChild(result);
 }
 
 function about() {
     let result = document.createElement("div");
-    let description = document.createElement("p");
-    description.innerHTML = "Hi, my name is Panzariu Ionut-Adrian and I am currently working as a Software Developer at Endava.";
-    result.appendChild(description);
+    result.setAttribute("class", "response");
+    result.setAttribute("id", "about");
 
-    terminal.appendChild(result);
+    addParagraphToComponent(result, NAME, "info");
+    addParagraphToComponent(result, ABOUT_MSG, "info");
+    addParagraphToComponent(result, CONNECT_MSG, "info");
 }
 
 function cv() {
-    let result = document.createElement("div");
-    result.innerHTML += "<p>Here is my CV</p>";
-    terminal.appendChild(result);
+    addDivAndParagraphToTerminal(TO_BE_IMPLEMENTED);
 }
 
 function cd() {
-    path += "/folder";
-    document.getElementById("path").innerText = path;
+    addDivAndParagraphToTerminal(TO_BE_IMPLEMENTED);
 }
 
 function ls() {
+    addDivAndParagraphToTerminal(TO_BE_IMPLEMENTED);
+}
+
+function addDivAndParagraphToTerminal(message) {
     let result = document.createElement("div");
-    result.innerHTML += "<p>TO BE IMPLEMENTED. DO NOT KNOW WHAT TO DO WITH THIS YET.</p>";
+    result.setAttribute("class", "response");
+
+    let description = document.createElement("p");
+    description.innerText = message;
+
+    result.appendChild(description);
     terminal.appendChild(result);
+}
+
+function addParagraphToComponent(component, message, className) {
+    let description = document.createElement("p");
+
+    description.innerText = message;
+    description.setAttribute("class", className);
+
+    component.appendChild(description);
+    terminal.appendChild(component);
 }
 
