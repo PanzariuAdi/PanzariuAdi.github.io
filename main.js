@@ -3,9 +3,11 @@ const terminal = document.getElementById('responses');
 const userElement = document.getElementById('user');
 const pathElement = document.getElementById('path');
 const branchElement = document.getElementById('branch');
-const VALID_COMMANDS = ['help', 'clear', 'about', 'banner', 'open github', 'open linkedin', 'open cv', 'pwd', 'cd', 'ls'];
+const command = document.getElementById('command');
+const VALID_COMMANDS = ['help', 'clear', 'about', 'banner', 'open github', 'open linkedin', 'open cv', 'pwd', 'cd', 'ls', 'whoami'];
 const ENTER_KEY = 13;
 const ARROW_UP = 38;
+
 const ASCII_NAME = `
     ██████╗░░█████╗░███╗░░██╗███████╗░█████╗░██████╗░██╗██╗░░░██╗  ░█████╗░██████╗░██╗
     ██╔══██╗██╔══██╗████╗░██║╚════██║██╔══██╗██╔══██╗██║██║░░░██║  ██╔══██╗██╔══██╗██║
@@ -112,9 +114,23 @@ function executeCommand(command) {
         case 'open cv':
             openUrl('cv');
             break;
+        case 'whoami':
+            whoami();
+            break;
     }
 
     inputElement.value = '';
+    terminal.scrollIntoView(false);
+}
+
+async function getIp() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        console.log(`Error fetching IP:`, error);
+    }
 }
 
 function addInfoLine(command) {
@@ -193,6 +209,22 @@ function openUrl(parameter) {
         window.open(CV_GITHUB);
     }
     
+}
+
+
+function whoami() {
+    getIp()
+        .then((data) => {
+            let result = document.createElement("div");
+            result.setAttribute("class", "response");
+
+            let description = document.createElement("p");
+            description.innerText = data;
+
+            result.appendChild(description);
+            terminal.appendChild(result);
+        })
+        .catch((reason) => console.log("Message : " + reason.message));
 }
 
 function cv() {
