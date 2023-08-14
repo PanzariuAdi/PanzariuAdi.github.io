@@ -1,10 +1,3 @@
-const inputElement = document.getElementById('commandInput');
-const terminal = document.getElementById('responses');
-const userElement = document.getElementById('user');
-const pathElement = document.getElementById('path');
-const branchElement = document.getElementById('branch');
-const command = document.getElementById('command');
-const VALID_COMMANDS = ['help', 'clear', 'about', 'banner', 'open github', 'open linkedin', 'open cv', 'pwd', 'cd', 'ls', 'whoami'];
 const ENTER_KEY = 13;
 const ARROW_UP = 38;
 
@@ -19,14 +12,22 @@ const ASCII_NAME = `
 const LINKEDIN_PROFILE = "https://www.linkedin.com/in/adipnz";
 const GITHUB_PROFILE = "https://github.com/PanzariuAdi";
 const CV_GITHUB = "https://github.com/PanzariuAdi/CV/blob/main/Panzariu_Ionut_Adrian.pdf";
-
 const NAME = "# Panzariu Ionut-Adrian";
-const ABOUT_MSG = "Welcome to my portfolio website! I am a passionate Software Developer with one year of experience. I am currently working at Endava in Iasi. :)";
+const IMAGE = "./images/me.jpg"
+const ABOUT_MSG = "Java Software Developer since June 2022 based in Iasi, Romania.";
 const CONNECT_MSG = "Let's connect and discuss potential collaborations!";
 const OPEN_LINKEDIN = "Type open linkedin to see my linkedin profile.";
 const OPEN_GITHUB = "Type open github to see my github profile.";
 const TO_BE_IMPLEMENTED = "To be implemented ...";
-const SOCIAL_MEDIA_MSG = "Write open linkedin/github/cv to see my profiles.";
+const SOCIAL_MEDIA_MSG = "Write linkedin/github/cv to see my profiles.";
+const inputElement = document.getElementById('commandInput');
+const terminal = document.getElementById('responses');
+const userElement = document.getElementById('user');
+const pathElement = document.getElementById('path');
+const branchElement = document.getElementById('branch');
+const command = document.getElementById('command');
+const VALID_COMMANDS = ['help', 'clear', 'about', 'banner', 'github', 'linkedin', 'cv', 'pwd', 'cd', 'ls', 'whoami', 'date'];
+
 
 let user = userElement.innerText;
 let path = pathElement.innerText;
@@ -105,17 +106,20 @@ function executeCommand(command) {
         case 'banner':
             banner();
             break;
-        case 'open linkedin':
+        case 'linkedin':
             openUrl('linkedin');
             break;
-        case 'open github':
+        case 'github':
             openUrl('github');
             break;
-        case 'open cv':
+        case 'cv':
             openUrl('cv');
             break;
         case 'whoami':
             whoami();
+            break;
+        case 'date':
+            getDate();
             break;
     }
 
@@ -190,6 +194,7 @@ function about() {
     result.setAttribute("id", "about");
 
     addParagraphToComponent(result, NAME, "info");
+    addImageToComponent(result, IMAGE, "info");
     addParagraphToComponent(result, ABOUT_MSG, "info");
     addParagraphToComponent(result, CONNECT_MSG, "info");
     addParagraphToComponent(result, SOCIAL_MEDIA_MSG, "info");
@@ -239,6 +244,11 @@ function ls() {
     addDivAndParagraphToTerminal(TO_BE_IMPLEMENTED);
 }
 
+function getDate() {
+    const date = new Date();
+    addDivAndParagraphToTerminal(date);
+}
+
 
 function addDivAndParagraphToTerminal(message) {
     let result = document.createElement("div");
@@ -261,3 +271,17 @@ function addParagraphToComponent(component, message, className) {
     terminal.appendChild(component);
 }
 
+function addImageToComponent(component, message, className) {
+    let image = document.createElement("img");
+
+    image.src = message;
+    image.setAttribute("class", className);
+    image.setAttribute("width", 300);
+    image.setAttribute("height", 300);
+    image.style['border-radius'] = "25px";
+    image.style['object-fit'] = "cover";
+
+    component.appendChild(image);
+    terminal.appendChild(component);
+
+}
