@@ -5,6 +5,7 @@ import python from '../assets/python.png'
 import github from '../assets/github.png'
 import linux from '../assets/linux.png'
 import aws from '../assets/aws.png'
+import rust from '../assets/rust.png'
 
 
 const Experience = () => {
@@ -14,36 +15,42 @@ const Experience = () => {
             id: 1,
             src: java,
             name: 'Java',
-            style: 'shadow-red-500'
+            style: 'shadow-white-500'
         },
         {
             id: 2,
             src: node,
             name: 'NodeJS',
-            style: 'shadow-green-500'
+            style: 'shadow-white-500'
         },
         {
             id: 3,
             src: python,
             name: 'Python',
-            style: 'shadow-yellow-500'
+            style: 'shadow-white-500'
         },
         {
             id: 4,
             src: aws,
             name: 'AWS',
-            style: 'shadow-yellow-500'
+            style: 'shadow-white-500'
         },
         {
             id: 5,
             src: github,
             name: 'GitHub',
-            style: 'shadow-purple-500'
+            style: 'shadow-white-500'
         },
         {
             id: 6,
             src: linux,
             name: 'Linux',
+            style: 'shadow-white-500'
+        },
+        {
+            id: 7,
+            src: rust,
+            name: 'Rust',
             style: 'shadow-white-500'
         },
     ]
